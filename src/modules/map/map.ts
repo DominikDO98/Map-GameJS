@@ -1,4 +1,4 @@
-import { IMap, TPosition, TPositionSet } from "types/map";
+import { IMap, TPosition, TPositionSet } from "../../types/map.js";
 
 export class Map {
   private _occupied: TPositionSet = new Set();
@@ -49,8 +49,8 @@ export class Map {
     if (this._player)
       return {
         player: this._player,
-        obstacles: this._obstecles,
-        points: this._points,
+        obstacles: Array.from(this._obstecles),
+        points: Array.from(this._points),
       };
   }
 }
