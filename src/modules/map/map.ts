@@ -1,10 +1,10 @@
 export class Map {
-  _occupied: Set<[number, number]> = new Set<[number, number]>();
+  private _occupied: Set<[number, number]> = new Set<[number, number]>();
   private _player: [number, number] | null = null;
   private _obstecles: Set<[number, number]> = new Set<[number, number]>();
   private _points: Set<[number, number]> = new Set<[number, number]>();
 
-  generatePlayer() {
+  private generatePlayer() {
     this._player = [
       Math.floor(Math.random() * 9),
       Math.floor(Math.random() * 9),
@@ -12,7 +12,7 @@ export class Map {
     this._occupied.add(this._player);
   }
 
-  generateObstecles() {
+  private generateObstecles() {
     while (this._obstecles.size < 20) {
       const pos: [number, number] = [
         Math.floor(Math.random() * 9),
@@ -21,13 +21,10 @@ export class Map {
       if (this._occupied.has(pos)) continue;
       this._occupied.add(pos);
       this._obstecles.add(pos);
-      console.log(this._obstecles.entries);
-
-      console.log(this._occupied);
     }
   }
 
-  generatePoints() {
+  private generatePoints() {
     while (this._points.size < 10) {
       const pos: [number, number] = [
         Math.floor(Math.random() * 9),
@@ -36,7 +33,6 @@ export class Map {
       if (this._occupied.has(pos)) continue;
       this._occupied.add(pos);
       this._points.add(pos);
-      console.log(this._occupied);
     }
   }
 
