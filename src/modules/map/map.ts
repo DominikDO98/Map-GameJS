@@ -41,4 +41,12 @@ export class Map {
     this.generateObstecles();
     this.generatePoints();
   }
+
+  sendMap() {
+    return {
+      player: this._player,
+      obstacles: this._obstecles,
+      points: this._points,
+    };
+  }
 }
