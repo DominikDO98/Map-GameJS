@@ -1,8 +1,10 @@
+import { IMap, TPosition, TPositionSet } from "types/map";
+
 export class Map {
-  private _occupied: Set<[number, number]> = new Set<[number, number]>();
-  private _player: [number, number] | null = null;
-  private _obstecles: Set<[number, number]> = new Set<[number, number]>();
-  private _points: Set<[number, number]> = new Set<[number, number]>();
+  private _occupied: TPositionSet = new Set();
+  private _player: TPosition | null = null;
+  private _obstecles: TPositionSet = new Set();
+  private _points: TPositionSet = new Set();
 
   private generatePlayer() {
     this._player = [
@@ -42,11 +44,13 @@ export class Map {
     this.generatePoints();
   }
 
-  sendMap() {
-    return {
-      player: this._player,
-      obstacles: this._obstecles,
-      points: this._points,
-    };
+  sendMap(): IMap | void {
+    if (!this._player) throw new Error("No player created!");
+    if (this._player)
+      return {
+        player: this._player,
+        obstacles: this._obstecles,
+        points: this._points,
+      };
   }
 }
