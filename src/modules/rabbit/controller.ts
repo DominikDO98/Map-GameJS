@@ -22,7 +22,12 @@ export class RabbitController {
     });
   }
 
-  async sendCall(queue: string, replyQueue: string, msg: string) {
+  async sendCall(
+    queue: string,
+    replyQueue: string,
+    msg: string,
+    callback: (reply: string) => void
+  ) {
     this._rabbit.valitadeConnection();
     await this._rabbit.channel
       ?.assertQueue(queue)
@@ -30,11 +35,13 @@ export class RabbitController {
         await this._rabbit.channel?.assertQueue(replyQueue);
         return this._rabbit.channel?.sendToQueue(queue, Buffer.from(msg));
       })
-      .then(async () => {
+      .then(async (send) => {
+        if (!send) throw Error("Sending a msg was unsuccesful!");
         console.log("Msg send");
         await this._rabbit.channel?.consume(replyQueue, (replyMsg) => {
-          if (!msg) throw Error("No msg!");
+          if (!replyMsg) throw Error("No msg!");
           console.log("Resoponse recived", replyMsg);
+          callback(String(replyMsg.content));
           this._rabbit.channel?.ack(replyMsg!);
         });
       })
