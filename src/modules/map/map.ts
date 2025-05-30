@@ -42,6 +42,7 @@ export class Map {
     this.generatePlayer();
     this.generateObstecles();
     this.generatePoints();
+    return this;
   }
 
   sendMap(): IMap | void {

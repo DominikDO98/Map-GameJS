@@ -1,15 +1,29 @@
-import express, { Request, Response } from "express";
+import { RpcConnection } from "../lib/src/broker/connection.js";
+import { logger } from "../lib/src/logger/logger.js";
 import { Map } from "./modules/map/map.js";
-const app = express();
 
-app.get("/map", (_req: Request, res: Response) => {
-  const map = new Map();
-  map.generate();
-  console.log(map.sendMap());
+class App {
+  private _broker: RpcConnection;
+  constructor() {
+    this._broker = new RpcConnection();
+  }
+  async init() {
+    await this._broker.init();
+    if (this._broker.connection) {
+      this._broker.listenQ("map", (replyQ, msg) => {
+        logger.warn(
+          `need to use replyq and msg, ${msg}, ${replyQ}`,
+          "ListenQ",
+          false
+        );
+        this._broker.replyCall(replyQ, JSON.stringify(this.sendMap()));
+      });
+    }
+  }
 
-  res.send(map.sendMap());
-});
+  sendMap() {
+    return new Map().generate().sendMap();
+  }
+}
 
-app.listen(3000, "localhost", () => {
-  console.log("Server is running on port 3000");
-});
+new App().init();
