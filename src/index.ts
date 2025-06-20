@@ -7,7 +7,7 @@ class App {
   }
   async init() {
     await this._broker.init().then(() => {
-      new MapController(this._broker).listen();
+      new MapController(this._broker).initQs();
     });
   }
 }

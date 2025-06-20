@@ -13,25 +13,32 @@ export class MapController {
     this._broker = broker;
   }
 
-  listen() {
+  initQs() {
+    this.listen(EQueues.Map, this.generateMap);
+  }
+
+  listen(
+    queue: string,
+    callback: (replyQueue: string, msg: ConsumeMessage | null) => void
+  ) {
     this._broker
-      .listenQ(EQueues.Map, this.generateMap.bind(this))
+      .listenQ(queue, callback.bind(this))
       .then(() => {
         logger.log(
-          "MapController listening for map generation requests",
-          "MapController.listen",
+          `MapController is listening to ${callback.name} requests`,
+          "MapConstoller.listen",
           false
         );
       })
       .catch((err) => {
         logger.error(err as string, "MapController.listen", true);
         setTimeout(() => {
-          this.listen();
+          this.initQs();
         }, 500);
       });
   }
 
-  generateMap(replyQ: string, msg: ConsumeMessage | null): void {
+  private generateMap(replyQ: string, msg: ConsumeMessage | null): void {
     try {
       const diff: IDifficultySettings = msg
         ? JSON.parse(msg?.content.toString())
