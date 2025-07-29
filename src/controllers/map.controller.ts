@@ -1,44 +1,29 @@
 import { ConsumeMessage } from "amqplib";
 import { EQueues } from "enums/index.js";
 import { IDifficultySettings } from "types/map.js";
-import { RpcConnection } from "../../lib/src/broker/connection";
 import { logger } from "../../lib/src/logger/logger";
 import { DEFAULT_DIFFICULTY } from "../constants/index.js";
 import { Map } from "../models/map.js";
+import { RpcConnectionManager } from "../../lib/src/broker/connectionManager";
 
 export class MapController {
-  private _broker: RpcConnection;
-
-  constructor(broker: RpcConnection) {
+  private _broker: RpcConnectionManager;
+  constructor(broker: RpcConnectionManager) {
     this._broker = broker;
   }
-
   initQs() {
-    this.listen(EQueues.Map, this.generateMap);
+    this.route(EQueues.Map, this.generateMap);
   }
-
-  listen(
+  private route(
     queue: string,
     callback: (replyQueue: string, msg: ConsumeMessage | null) => void
   ) {
-    this._broker
-      .listenQ(queue, callback.bind(this))
-      .then(() => {
-        logger.log(
-          `MapController is listening to ${callback.name} requests`,
-          "MapConstoller.listen",
-          false
-        );
-      })
-      .catch((err) => {
-        logger.error(err as string, "MapController.listen", true);
-        setTimeout(() => {
-          this.initQs();
-        }, 500);
-      });
+    this._broker.listenQ(queue, callback.bind(this), "Map Controller");
   }
-
-  private generateMap(replyQ: string, msg: ConsumeMessage | null): void {
+  private async generateMap(
+    replyQ: string,
+    msg: ConsumeMessage | null
+  ): Promise<void> {
     try {
       const diff: IDifficultySettings = msg
         ? JSON.parse(msg?.content.toString())
@@ -47,7 +32,7 @@ export class MapController {
       this._broker.replyCall(replyQ, JSON.stringify(dto));
       return;
     } catch (err) {
-      logger.error(err as string, "MapController.generateMap", true);
+      logger.error(err as string, "Map Controller", true);
       return;
     }
   }
