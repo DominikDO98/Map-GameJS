@@ -1,4 +1,4 @@
-import { IMapDTO, TPosition } from "../types/map";
+import type { IMapDTO, TPosition } from "../types/map.js";
 
 export class MapDTO implements IMapDTO {
   obstacles: TPosition[];
