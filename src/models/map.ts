@@ -1,8 +1,8 @@
-import { GRID_SIZE } from "constants.js";
-import { MapDTO } from "dto/map.DTO.js";
-import { logger } from "../../lib/src/logger/logger.js";
-import { PathFinding } from "../../utils/pathFinding.js";
-import { IDifficultySettings, IMapDTO, TPosition } from "../types/map.js";
+import { logger } from "../../lib/logger/logger.js";
+import { PathFinding } from "../utils/pathFinding.js";
+import { GRID_SIZE } from "../constants/index.js";
+import { MapDTO } from "../dto/map.DTO.js";
+import type { IDifficultySettings, IMapDTO, TPosition } from "../types/map.js";
 
 export class Map {
   private _occupied: Set<string> = new Set();
@@ -40,8 +40,8 @@ export class Map {
   }
 
   private generateRandomPosition(maxX: number, maxY: number): string {
-    return `${Math.floor(Math.random() * maxY)},${Math.floor(
-      Math.random() * maxX
+    return `${Math.floor(Math.random() * (maxY + 1))},${Math.floor(
+      Math.random() * (maxX + 1)
     )}`;
   }
 
@@ -83,7 +83,14 @@ export class Map {
         continue;
       this._occupied.add(pos);
       this._obstecles.add(pos);
-      if (!this.checkPossiblePaths(this._player!, [9, 9])) {
+      const path = new PathFinding(this.convertMap()).findPath(
+        this.convert(this._player!),
+        [9, 9]
+      );
+      console.log(path);
+      console.log(this.checkPossiblePaths(this._player!, [9, 9]));
+
+      if (!path[0]) {
         iterations++;
         logger.warn(
           `Obstacle at ${pos} blocked the path, removing and retrying...`,

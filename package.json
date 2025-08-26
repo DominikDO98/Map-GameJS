@@ -1,10 +1,13 @@
 {
-  "name": "game",
+  "name": "map",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "start": "tsx src/index.ts",
+    "start": "node dist/src/index.js",
     "dev": "nodemon --exec tsx ./src/index.ts",
+    "build": "tsc",
+    "build:clean": "rm -r dist && tsc",
     "test": "jest"
   },
   "keywords": [],
@@ -12,12 +15,14 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "amqplib": "^0.10.5",
-    "dotenv": "^16.4.7"
+    "amqplib": "^0.10.7",
+    "chalk": "^5.4.1",
+    "dotenv": "^16.4.7",
+    "winston": "^3.17.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
-    "@types/amqplib": "^0.10.6",
+    "@types/amqplib": "^0.10.7",
     "@types/jest": "^29.5.14",
     "@types/nodemon": "^1.19.6",
     "eslint": "^9.19.0",

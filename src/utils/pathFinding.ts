@@ -1,5 +1,5 @@
-import { GRID_SIZE, movement } from "../src/constants";
-import { IMapDTO, TPosition } from "../src/types/map";
+import { GRID_SIZE, movement } from "../constants/index.js";
+import type { IMapDTO, TPosition } from "../types/map.js";
 
 interface INode {
   position: TPosition;
@@ -61,14 +61,15 @@ export class PathFinding {
   }
 
   findPath(start: TPosition, goal: TPosition): TPosition[] {
-    const path = [];
+    const path: Array<TPosition> = [];
     let iterations = 0;
     const startNode: INode = {
       position: start,
       g: 0,
       h: Math.abs(start[0] - goal[0]) + Math.abs(start[1] - goal[1]),
-      f: 0,
+      f: 0, //Placeholder
     };
+    startNode.f = startNode.g + startNode.h; //Calculate true f.cost for starting node
     const goalNode: INode = {
       position: goal,
       g: 0,
@@ -88,10 +89,13 @@ export class PathFinding {
       // If the current node is the goal, reconstruct the path
       if (x === goal[0] && y === goal[1]) {
         let node: INode | null = currentNode;
+        // console.log("node:   ", node);
         while (node) {
           path.unshift(node.position);
           node = node.parent || null;
+          // If no path is found, return an empty array
         }
+        return path;
       }
       // Mark the current node as processed
       proccessedList.add(`${x},${y}`);

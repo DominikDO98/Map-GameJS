@@ -1,6 +1,6 @@
-import { MapController } from "controllers/map.controller.js";
-import { RpcConnectionManager } from "../lib/src/broker/connectionManager.js";
-import { logger } from "../lib/src/logger/logger.js";
+import { MapController } from "./controllers/map.controller.js";
+import { RpcConnectionManager } from "../lib/broker/connectionManager.js";
+import { logger } from "../lib/logger/logger.js";
 class App {
   private _broker: RpcConnectionManager;
   constructor() {
