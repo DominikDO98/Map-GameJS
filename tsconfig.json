@@ -25,8 +25,8 @@
     "isolatedDeclarations": false,
     "isolatedModules": true,
     "lib": ["ES6", "ESNext"],
-    "module": "ESNext",
-    "moduleResolution": "Node",
+    "module": "node16",
+    "moduleResolution": "node16",
     "newLine": "lf",
     "noEmit": false,
     "noEmitHelpers": false,
@@ -61,11 +61,15 @@
     "types": ["node"],
     "useDefineForClassFields": true,
     "useUnknownInCatchVariables": true,
-    "verbatimModuleSyntax": false,
-    "rootDir": "./src",
+    "verbatimModuleSyntax": true,
     "baseUrl": "./src",
     "outDir": "./dist"
   },
   "exclude": ["node_modules"],
-  "include": ["src/**/*.ts", "env.d.ts"]
+  "include": [
+    "src/**/*.ts",
+    "lib/**/*.ts",
+    "env.d.ts",
+    "src/utils/pathFinding.ts"
+  ]
 }
