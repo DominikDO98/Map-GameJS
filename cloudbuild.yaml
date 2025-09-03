@@ -41,5 +41,6 @@ steps:
         echo "  StrictHostKeyChecking no" >> ~/.ssh/config
 
         # SSH to VM and deploy
-        gcloud compute ssh vm-mongo-rabbit \
+        gcloud compute ssh -i ${_USER}@${_VM_IP} vm-mongo-rabbit \
+          --zone=us-central1-c
           --command "cd ~/docker && ./deploy.sh"
