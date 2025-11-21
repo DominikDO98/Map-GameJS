@@ -32,5 +32,7 @@ jobs:
           ${{ secrets.GCP_ARTIFACT_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_ARTIFACT_REPO }}/${{ secrets.IMAGE_NAME }}:latest
 
       - name: Push Docker image
+        env:
+          DOCKER_CONFIG: /tmp/.docker
         run: |
           docker push ${{ secrets.GCP_ARTIFACT_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_ARTIFACT_REPO }}/${{ secrets.IMAGE_NAME }}:latest
