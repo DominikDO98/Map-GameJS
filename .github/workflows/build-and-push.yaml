@@ -14,14 +14,12 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Set up gcloud
+      - name: Authenticate
         uses: google-github-actions/auth@v2
         with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-          export_default_credentials: true
+          creadential_json: ${{ secrets.GCP_SA_KEY }}
 
-      - name: Authenticate
+      - name: Configure
         run: |
           gcloud auth configure-docker ${{ secrets.GCP_ARTIFACT_REGION }}-docker.pkg.dev
 
