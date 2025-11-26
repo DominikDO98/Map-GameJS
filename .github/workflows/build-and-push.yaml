@@ -17,7 +17,8 @@ jobs:
       - name: Authenticate
         uses: google-github-actions/auth@v2
         with:
-          creadential_json: ${{ secrets.GCP_SA_KEY }}
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          projject_id: ${{ secrets.GCP_PROJECT_ID}}
 
       - name: Configure
         run: |
