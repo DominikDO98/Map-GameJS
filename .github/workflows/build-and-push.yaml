@@ -47,6 +47,6 @@ jobs:
 
       - name: SSH VM and pull
         run: |
-          gcloud compute ssh ${{ secrets.VM_NAME }} \
-          --zone=${{ secrets.VM_ZONE }} \
+          gcloud compute ssh ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} \
+          --zone=${{ secrets.GCP_ARTIFACT_REGION }} \
           --command="cd ${{ secrets.DOCKER_COMPOSE_DIR }} && docker compose pull && docker compose up -d"
