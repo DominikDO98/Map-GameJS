@@ -18,18 +18,32 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
-          projject_id: ${{ secrets.GCP_PROJECT_ID}}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
 
       - name: Configure
         run: |
           gcloud auth configure-docker ${{ secrets.GCP_ARTIFACT_REGION }}-docker.pkg.dev
-
-      - name: Log
-        run: |
-          echo ${{  secrets.GCP_ARTIFACT_REGION}}
 
       - name: Push Docker image
         run: |
           gcloud auth configure-docker ${{ secrets.GCP_ARTIFACT_REGION }}-docker.pkg.dev
           docker build -t ${{ secrets.GCP_ARTIFACT_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_ARTIFACT_REPO }}/${{ secrets.IMAGE_NAME }}:latest .
           docker push ${{ secrets.GCP_ARTIFACT_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_ARTIFACT_REPO }}/${{ secrets.IMAGE_NAME }}:latest
+
+    deploy:
+      - name: Install SSH Client
+        run: sudo apt-get install -y openssh-client
+
+      - name: Add SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VM_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+      - name: Deploy to VM
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} \
+          "cd /path/to/your/docker-compose && \
+           gcloud auth configure-docker ${{ secrets.GCP_ARTIFACT_REGION }}-docker.pkg.dev && \
+           docker compose pull && \
+           docker compose up -d"
