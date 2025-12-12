@@ -31,7 +31,7 @@ jobs:
           docker push ${{ secrets.GCP_ARTIFACT_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_ARTIFACT_REPO }}/${{ secrets.IMAGE_NAME }}:latest
 
   deploy:
-    runs-in: ubuntu-latest
+    runs-on: ubuntu-latest
     needs: build
 
     steps:
