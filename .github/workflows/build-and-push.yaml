@@ -38,7 +38,7 @@ jobs:
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.VM_SSH_KEY }}" > ~/.ssh/${{ secrets.VM_USER }}_key
+          echo "${{ secrets.VM_SSH_KEY }}" | tr -d '\r' > ~/.ssh/${{ secrets.VM_USER }}_key
           chmod 600 ~/.ssh/${{ secrets.VM_USER }}_key
 
       - name: SSH VM and pull Docker Compose
