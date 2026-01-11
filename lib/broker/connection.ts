@@ -39,6 +39,7 @@ export class RpcConnection {
       this._connection = null;
     } catch (err) {
       logger.warn(err as string, "Rpc connection", false);
+      logger.log(process.env.RABBITMQ_URL, process.env.TIMEOUT);
       this._channel = null;
       this._connection = null;
     }
