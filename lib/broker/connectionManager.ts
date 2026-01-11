@@ -23,7 +23,6 @@ export class RpcConnectionManager {
         logger.log("Broker initialization is over...", "Rpc Menager", false);
     } catch (err) {
       logger.error(err as string, "Rpc Menager", true);
-      logger.log(process.env.RABBITMQ_URL, process.env.TIMEOUT);
     }
   }
   async listenQ(
@@ -43,6 +42,7 @@ export class RpcConnectionManager {
         );
       });
     } catch (err) {
+      logger.log(process.env.RABBITMQ_URL, process.env.TIMEOUT);
       logger.error(err as string, "Rpc Menager", true);
     }
   }

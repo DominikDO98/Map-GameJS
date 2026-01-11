@@ -1,6 +1,6 @@
-import { MapController } from "./controllers/map.controller.js";
 import { RpcConnectionManager } from "../lib/broker/connectionManager.js";
 import { logger } from "../lib/logger/logger.js";
+import { MapController } from "./controllers/map.controller.js";
 class App {
   private _broker: RpcConnectionManager;
   constructor() {
@@ -8,6 +8,8 @@ class App {
   }
   async init() {
     try {
+      console.log(process.env.TIMEOUT);
+
       await this._broker.init();
       new MapController(this._broker).initQs();
     } catch (err) {
